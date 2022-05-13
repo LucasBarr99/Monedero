@@ -13,19 +13,11 @@ import java.util.stream.Stream;
 
 public class Cuenta {
 
-  private double saldo;
+  private double saldo = 0;
   private List<Movimiento> movimientos = new ArrayList<>();
-
-  public Cuenta() {
-    saldo = 0;
-  }
 
   public Stream<Movimiento> getDepositos(){
     return this.movimientos.stream().filter(Movimiento::isDeposito);
-  }
-
-  public void setMovimientos(List<Movimiento> movimientos) {
-    this.movimientos = movimientos;
   }
 
   public void poner(double cuanto) {
