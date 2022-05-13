@@ -15,6 +15,7 @@ public class Cuenta {
 
   private double saldo = 0;
   private List<Movimiento> movimientos = new ArrayList<>();
+  private Integer maxDepositosDiarios = 3;
 
   public Stream<Movimiento> getDepositos(){
     return this.movimientos.stream().filter(Movimiento::isDeposito);
@@ -22,11 +23,7 @@ public class Cuenta {
 
   public void poner(double cuanto) {
     validarMontoPositivo(cuanto);
-
-    if (getDepositos().count() >= 3) {
-      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
-    }
-
+    validarDepositosDiarios();
     new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
 
@@ -68,9 +65,15 @@ public class Cuenta {
     this.saldo = saldo;
   }
 
-  public void validarMontoPositivo(double monto){
+  private void validarMontoPositivo(double monto){
     if (monto <= 0) {
       throw new MontoNegativoException(monto + ": el monto a ingresar debe ser un valor positivo");
+    }
+  }
+
+  private void validarDepositosDiarios(){
+    if (getDepositos().count() >= maxDepositosDiarios) {
+      throw new MaximaCantidadDepositosException("Ya excedio los " + maxDepositosDiarios + " depositos diarios");
     }
   }
 
